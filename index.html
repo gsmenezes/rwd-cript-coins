@@ -3,14 +3,62 @@
 
   <head>
     <meta charset="utf-8">
+    <link rel="shortcut icon" href="icon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <title>CoinMarketCap</title>
-    <script type="text/javascript">
 
-    </script>
   </head>
 
   <body>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Coin Market Cap</li>
+      </ol>
+    </nav>
+
+    <div class="d-flex p-3 bd-highlight">
+      <div id='coins'></div>
+    </div>
 
   </body>
+
+  <script type="text/javascript">
+    let apiKey = {
+      key: 'b6528678-6e78-4476-920b-944013659196'
+    }
+
+    fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?CMC_PRO_API_KEY=' + apiKey.key)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Erro ao executar a requisição, status ' + response.status)
+        }
+      })
+      .then((api) => {
+
+        let text = "";
+
+        for (let i = 0; i < 20; i++) {
+          text = text + `
+          <div class="media">
+            <img src="coins.png" class="align-self-center mr-3" alt="coin" width="60" height="45">
+            <div class="media-body">
+              <h5 class="mt-2">${api.data[i].name}</h5>
+              <p>${api.data[i].symbol}</p>
+              </div>
+              </div>
+              `;
+
+          document.getElementById("coins").innerHTML = text;
+        }
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+
+
+  </script>
 
 </html>
